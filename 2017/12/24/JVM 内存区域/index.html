@@ -3,15 +3,22 @@
 <head>
     <meta charset="utf-8">
     
-    <title>Archive: 2018/6 | Joe&#39;s Blog</title>
+    <title>JVM-内存区域 | Joe&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta property="og:type" content="website">
-<meta property="og:title" content="Joe&#39;s Blog">
-<meta property="og:url" content="https://joe-eoj.github.io/archives/2018/06/index.html">
+    <meta name="description" content="JVM对于一位Java工程师，是必须涉猎或者一定程度上熟悉的知识。试想你的程序部署在生产环境服务器上，如果哪天crash了，如果你对JVM的内部原理一无所知，那么你将是崩溃的。所以，为了尽量这样的灾难性事件发生，或者发生之后为了能快速定位和解决问题，我们必须了解JVM。">
+<meta name="keywords" content="JVM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM-内存区域">
+<meta property="og:url" content="https://joe-eoj.github.io/2017/12/24/JVM 内存区域/index.html">
 <meta property="og:site_name" content="Joe&#39;s Blog">
+<meta property="og:description" content="JVM对于一位Java工程师，是必须涉猎或者一定程度上熟悉的知识。试想你的程序部署在生产环境服务器上，如果哪天crash了，如果你对JVM的内部原理一无所知，那么你将是崩溃的。所以，为了尽量这样的灾难性事件发生，或者发生之后为了能快速定位和解决问题，我们必须了解JVM。">
 <meta property="og:locale" content="en">
+<meta property="og:image" content="https://joe-eoj.github.io/post/gallary/jvm-banner.png">
+<meta property="og:updated_time" content="2018-06-07T15:15:26.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Joe&#39;s Blog">
+<meta name="twitter:title" content="JVM-内存区域">
+<meta name="twitter:description" content="JVM对于一位Java工程师，是必须涉猎或者一定程度上熟悉的知识。试想你的程序部署在生产环境服务器上，如果哪天crash了，如果你对JVM的内部原理一无所知，那么你将是崩溃的。所以，为了尽量这样的灾难性事件发生，或者发生之后为了能快速定位和解决问题，我们必须了解JVM。">
+<meta name="twitter:image" content="https://joe-eoj.github.io/post/gallary/jvm-banner.png">
     
 
     
@@ -169,50 +176,181 @@
 </aside>
 
             
-            <section id="main"><div class="timeline timeline-wrap">
-    
-            <div class="timeline-row timeline-row-major">
-                <span class="node"><i class="fas fa-calendar-alt"></i></span>
-                <h1 class="title">2018</h1>
-            </div>
+            <section id="main"><article id="post-JVM 内存区域" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
         
-        <div class="timeline-row">
-            <span class="node"></span>
-            <div class="content">
+            
+	
+		<img src="/post/gallary/jvm-banner.png" class="article-banner" />
+	
+
+
+
+        
+        
+            <header class="article-header">
                 
     
-        <h1 itemprop="name">
-            <a class="timeline-article-title" href="/post/2018/06/07/hello-world/">Hello World</a>
+        <h1 class="article-title" itemprop="name">
+            JVM-内存区域
         </h1>
     
 
-                <div class="article-meta">
-                    
+                
+                    <div class="article-meta">
+                        
     <div class="article-date">
         <i class="fas fa-calendar-alt"></i>
-        <a href="/post/2018/06/07/hello-world/">
-            <time datetime="2018-06-07T02:05:42.000Z" itemprop="datePublished">2018-06-07</time>
+        <a href="/post/2017/12/24/JVM 内存区域/">
+            <time datetime="2017-12-24T02:09:05.000Z" itemprop="datePublished">2017-12-24</time>
         </a>
     </div>
 
 
-                    
+                        
     <div class="article-category">
     	<i class="fas fa-folder"></i>
-        <a class="article-category-link" href="/post/categories/example/">example</a>
+        <a class="article-category-link" href="/post/categories/JVM/">JVM</a>
     </div>
 
-                    
+                        
     <div class="article-tag">
         <i class="fas fa-tag"></i>
-        <a class="tag-link" href="/post/tags/test/">test</a>
+        <a class="tag-link" href="/post/tags/JVM/">JVM</a>
     </div>
 
-                </div>
-            </div>
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <p>JVM对于一位Java工程师，是必须涉猎或者一定程度上熟悉的知识。试想你的程序部署在生产环境服务器上，如果哪天crash<br>了，如果你对JVM的内部原理一无所知，那么你将是崩溃的。所以，为了尽量这样的灾难性事件发生，或者发生之后为了能快速定位和解决问题，我们必须了解JVM。<br><a id="more"></a></p>
+<p>今天开始，我将系统地整理和归纳JVM领域重要的 basic knowledge，也会针对特定问题做一些扩展性的探讨。目的是将自己所学的东西消化和整理，温故而知新，同时 post 出来，希望对别人也有所启发和帮助。</p>
+<p>今天我要尝试探讨的是JVM的内存区域，包括内存区域的划分、各个内存区域的作用。</p>
+<p><img src="/post/gallary/jvm-memory-model.jpg" alt=""></p>
+<p>上图是基于Java SE7虚拟机规范的内存模型。其中methodarea[方法区] 和 heap[堆]是所有线程共享的数据区域，pc register[程序计数器]、java stacks[虚拟机栈]、native method stacks[本地方法栈]是线程隔离的数据区域。这五个区域构成了JVM整个运行时的数据区域，接下来我将分别介绍每个区域的作用。</p>
+<ul>
+<li><h2 id="pc-register-程序计数器"><a href="#pc-register-程序计数器" class="headerlink" title="pc register[程序计数器]"></a>pc register[程序计数器]</h2><p>pc register，可以看做是当前线程执行的字节码的行号指示器，字节码解释器就是通过改变它的值来选取下一条要执行的指令，我们平时常用的分支、循环、跳转、异常处理都需要依赖它。在单核计算机时代，JVM的多线程是通过线程之间的切换以分享cpu时钟来实现的，线程之间切换之后能回到正确的执行位置，也是靠它。显而易见，它肯定是线程私有的。</p>
+</li>
+<li><h2 id="java-stacks-虚拟机栈"><a href="#java-stacks-虚拟机栈" class="headerlink" title="java stacks[虚拟机栈]"></a>java stacks[虚拟机栈]</h2><p>java stacks描述的是方法执行时的内存模型，方法在执行时会创建一个栈帧(stack frame)，用于存储局部变量表、操作数栈、动态链接、方法出口等信息【可以理解为方法执行时的meta data，栈帧具体存储的信息，<a href="http://www.artima.com/insidejvm/ed2/jvm8.html" target="_blank" rel="noopener">可以看这篇文章</a>】。每一个方法从执行到完成的过程，意味着栈帧从入栈到出栈的过程。</p>
+</li>
+<li><h2 id="native-method-stack-本地方法栈"><a href="#native-method-stack-本地方法栈" class="headerlink" title="native method stack[本地方法栈]"></a>native method stack[本地方法栈]</h2><p>顾名思义，就是在JVM本地方法调用的时候使用的，功能跟java stacks类似。之所以将其区别开，是因为JVM对本地方法栈中的方法使用的语言、使用方式和数据格式没有强制统一的规定，JVM 的implements可以自由实现它。</p>
+</li>
+<li><h2 id="heap-堆"><a href="#heap-堆" class="headerlink" title="heap[堆]"></a>heap[堆]</h2><p>heap是JVM内存中占用空间最大的一块，也是垃圾收集器管理的主要区域，它用于存储对象实例和数组。前面已经提到了，heap是所有线程共享的数据区域。</p>
+</li>
+<li><h2 id="method-area-方法区"><a href="#method-area-方法区" class="headerlink" title="method area[方法区]"></a>method area[方法区]</h2><p>method area 和 heap 一样，是所有线程共享的数据区域。它用于存储被加载的类信息、常量、静态变量、即时编译器编译后的代码等数据。垃圾收集器针对该区域的回收，主要是针对常量池的回收和对类型的卸载，但是回收条件相当苛刻。<br>runtime constant pool[运行时常量池]，作为方法区的一部分，需要提一下。运行时常量池用于存储加载后Class文件中的常量池【存放编译期生成的各种字面量和符号引用】。</p>
+</li>
+<li><h2 id="direct-memory-直接内存"><a href="#direct-memory-直接内存" class="headerlink" title="direct memory[直接内存]"></a>direct memory[直接内存]</h2><p>直接内存其实不是JVM运行时的内存区域，甚至不是JVM规范中定义的内存区域，它率属于本机内存。在JDK1.4中新加入了NI/O， 引入了一种基于通道(channel)和缓冲区(buffer)的I/O方式，为了避免JVM和操作系统之间数据的来回复制，可以使用Native函数库直接分配堆外内存，然后通过存储在堆中的DirectByteBuffer对象作为这块内存的引用进行操作。</p>
+</li>
+</ul>
+
+        
         </div>
-    
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
 </div>
+
+    <a data-url="https://joe-eoj.github.io/2017/12/24/JVM 内存区域/" data-id="cji4owbdf00004rs6ek1dbzn4" class="article-share-link"><i class="fas fa-share"></i>Share</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fab fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fab fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fab fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fab fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/post/2018/06/07/hello-world/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Newer</strong>
+            <div class="article-nav-title">
+                
+                    Hello World
+                
+            </div>
+        </a>
+    
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    
+
 </section>
             
                 
