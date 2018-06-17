@@ -5,17 +5,19 @@
     
     <title>Unix 常用命令汇总 | Joe&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="文件查找+操作按目录名称查找find [path] -type d -name &amp;quot;directory name [suport wild characters]&amp;quot; -[depth|mindepth|maxdepth] npath表示搜索的根路径；-type表示搜索类型：d-目录，f-文件，若不显示指明type参数，则匹配所有；-name参数可以使用模糊匹配，也可以使用-path">
+    <meta name="description" content="持续更新中~~">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Unix 常用命令汇总">
 <meta property="og:url" content="https://joe-eoj.github.io/2018/06/10/Unix 常用命令汇总/index.html">
 <meta property="og:site_name" content="Joe&#39;s Blog">
-<meta property="og:description" content="文件查找+操作按目录名称查找find [path] -type d -name &amp;quot;directory name [suport wild characters]&amp;quot; -[depth|mindepth|maxdepth] npath表示搜索的根路径；-type表示搜索类型：d-目录，f-文件，若不显示指明type参数，则匹配所有；-name参数可以使用模糊匹配，也可以使用-path">
+<meta property="og:description" content="持续更新中~~">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-06-17T09:52:24.000Z">
+<meta property="og:image" content="https://joe-eoj.github.io/blog/gallary/unix-banner.png">
+<meta property="og:updated_time" content="2018-06-17T10:03:55.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Unix 常用命令汇总">
-<meta name="twitter:description" content="文件查找+操作按目录名称查找find [path] -type d -name &amp;quot;directory name [suport wild characters]&amp;quot; -[depth|mindepth|maxdepth] npath表示搜索的根路径；-type表示搜索类型：d-目录，f-文件，若不显示指明type参数，则匹配所有；-name参数可以使用模糊匹配，也可以使用-path">
+<meta name="twitter:description" content="持续更新中~~">
+<meta name="twitter:image" content="https://joe-eoj.github.io/blog/gallary/unix-banner.png">
     
 
     
@@ -176,6 +178,14 @@
             <section id="main"><article id="post-Unix 常用命令汇总" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
+            
+	
+		<img src="/blog/gallary/unix-banner.png" class="article-banner" />
+	
+
+
+
+        
         
             <header class="article-header">
                 
@@ -216,7 +226,8 @@
                     <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#文件查找-操作"><span class="toc-number">1.</span> <span class="toc-text">文件查找+操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#按目录名称查找"><span class="toc-number">1.1.</span> <span class="toc-text">按目录名称查找</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#对查询结果的操作"><span class="toc-number">1.2.</span> <span class="toc-text">对查询结果的操作</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看文件大小"><span class="toc-number">2.</span> <span class="toc-text">查看文件大小</span></a></li></ol>
                 </div>
             
-            <h3 id="文件查找-操作"><a href="#文件查找-操作" class="headerlink" title="文件查找+操作"></a>文件查找+操作</h3><h4 id="按目录名称查找"><a href="#按目录名称查找" class="headerlink" title="按目录名称查找"></a>按目录名称查找</h4><p><code>find [path] -type d -name &quot;directory name [suport wild characters]&quot; -[depth|mindepth|maxdepth] n</code><br><code>path</code>表示搜索的根路径；<br><code>-type</code>表示搜索类型：d-目录，f-文件，若不显示指明type参数，则匹配所有；<br><code>-name</code>参数可以使用模糊匹配，也可以使用<code>-path</code>用于按路径搜索；<br><code>-depth</code>表示某一深度，<code>-mindepth</code>最小深度，<code>-maxdepth</code>最大深度；<br>example:<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">find . -<span class="built_in">type</span> d -name <span class="string">'target'</span>           <span class="comment">#搜索当前目录下所有的名为target的文件夹</span></span><br><span class="line">find . -<span class="built_in">type</span> -d -path <span class="string">'*/WEB-INF/lib'</span>   <span class="comment">#搜索当前目录下所有WEB-INF下的lib文件夹</span></span><br><span class="line">find /data/logs -<span class="built_in">type</span> -f -name <span class="string">'biz.log*'</span> -depth 2 <span class="comment">#搜索/data/logs目录的grand children目录下以biz.log开头的文件</span></span><br></pre></td></tr></table></figure></p>
+            <p><center>持续更新中~~</center><br><a id="more"></a></p>
+<h3 id="文件查找-操作"><a href="#文件查找-操作" class="headerlink" title="文件查找+操作"></a>文件查找+操作</h3><h4 id="按目录名称查找"><a href="#按目录名称查找" class="headerlink" title="按目录名称查找"></a>按目录名称查找</h4><p><code>find [path] -type d -name &quot;directory name [suport wild characters]&quot; -[depth|mindepth|maxdepth] n</code><br><code>path</code>表示搜索的根路径；<br><code>-type</code>表示搜索类型：d-目录，f-文件，若不显示指明type参数，则匹配所有；<br><code>-name</code>参数可以使用模糊匹配，也可以使用<code>-path</code>用于按路径搜索；<br><code>-depth</code>表示某一深度，<code>-mindepth</code>最小深度，<code>-maxdepth</code>最大深度；<br>example:<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">find . -<span class="built_in">type</span> d -name <span class="string">'target'</span>           <span class="comment">#搜索当前目录下所有的名为target的文件夹</span></span><br><span class="line">find . -<span class="built_in">type</span> -d -path <span class="string">'*/WEB-INF/lib'</span>   <span class="comment">#搜索当前目录下所有WEB-INF下的lib文件夹</span></span><br><span class="line">find /data/logs -<span class="built_in">type</span> -f -name <span class="string">'biz.log*'</span> -depth 2 <span class="comment">#搜索/data/logs目录的grand children目录下以biz.log开头的文件</span></span><br></pre></td></tr></table></figure></p>
 <p><a href="#toc">[TOP]</a></p>
 <h4 id="对查询结果的操作"><a href="#对查询结果的操作" class="headerlink" title="对查询结果的操作"></a>对查询结果的操作</h4><p><code>find result -empty -delete</code> <code>-delete</code> 删除搜索到的结果，<code>-empty</code> 只删除查询到的空目录；<br><code>find result -exec rm -r {} [\|+]</code> 同样是删除搜索到的结果，<code>\</code>表示 one rm command per directory found，<code>+</code>表示 rm with multiple directories at once<br>example:<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . -<span class="built_in">type</span> d -name <span class="string">'target'</span> -<span class="built_in">exec</span> rm -r &#123;&#125; +   <span class="comment">#删除当前目录下所有的名为target的文件夹</span></span><br></pre></td></tr></table></figure></p>
 <p><a href="#toc">[TOP]</a></p>
@@ -231,7 +242,7 @@
 
 </div>
 
-    <a data-url="https://joe-eoj.github.io/2018/06/10/Unix 常用命令汇总/" data-id="cjiinkeyk0000vts6y0zsuwm9" class="article-share-link"><i class="fas fa-share"></i>Share</a>
+    <a data-url="https://joe-eoj.github.io/2018/06/10/Unix 常用命令汇总/" data-id="cjiinzh320002z1s62tf0js54" class="article-share-link"><i class="fas fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -339,7 +350,7 @@
                             <a href="/blog/2018/06/10/Unix 常用命令汇总/" class="thumbnail">
     
     
-        <span class="thumbnail-image thumbnail-none"></span>
+        <span style="background-image:url(/blog/gallary/unix-banner.png)" alt="Unix 常用命令汇总" class="thumbnail-image"></span>
     
 </a>
 
